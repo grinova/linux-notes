@@ -140,6 +140,14 @@ cp -v /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/efi/EFI/gentoo/
 efibootmgr -c -d /dev/sda -p 1 -L "Gentoo [kernel 6.1.19]" -l '\EFI\gentoo\vmlinuz-6.1.19-gentoo-x86_64' -u 'crypt_root=/dev/sda2'
 ```
 
+## Проверка secure boot режима
+
+```bash
+mokutil --sb-state
+# Output:
+# SecureBoot enabled
+```
+
 
 ## References
 
