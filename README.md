@@ -8,3 +8,4 @@
 - [Отключение hostname mode для NetworkManager](./network-manager-hostname-mode.md)
 - [Google Chrome](./google-chrome.md)
 - [Работа с Docker на удалённом сервере](./remote-docker.md)
+- [ZSH](./zsh.md)
