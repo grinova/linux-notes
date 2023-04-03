@@ -29,23 +29,23 @@ sda
 
 ## Форматирование разделов
 
-```bash
-# Форматироване EFI раздела в FAT32
-mkfs.vfat -F32 /dev/sda1
+```console
+# # Форматироване EFI раздела в FAT32
+# mkfs.vfat -F32 /dev/sda1
 
-# Форматирование luks раздела с корневой файловой системой
-cryptsetup luksFormat -c aes-xts-plain64 -h sha256 /dev/sda2
-cryptsetup open /dev/sda2 root
-# Форматирование корневого раздела в BTRFS
-mkfs.btrfs /dev/mapper/root
-cryptsetup close root
+# # Форматирование luks раздела с корневой файловой системой
+# cryptsetup luksFormat -c aes-xts-plain64 -h sha256 /dev/sda2
+# cryptsetup open /dev/sda2 root
+# # Форматирование корневого раздела в BTRFS
+# mkfs.btrfs /dev/mapper/root
+# cryptsetup close root
 
-# Форматирование luks раздела с домашней директорией
-cryptsetup luksFormat -c aes-xts-plain64 -h sha256 /dev/sda3
-cryptsetup open /dev/sda3 home
-# Форматирование раздела с домашней директорией в BTRFS
-mkfs.btrfs /dev/mapper/home
-cryptsetup close home
+# # Форматирование luks раздела с домашней директорией
+# cryptsetup luksFormat -c aes-xts-plain64 -h sha256 /dev/sda3
+# cryptsetup open /dev/sda3 home
+# # Форматирование раздела с домашней директорией в BTRFS
+# mkfs.btrfs /dev/mapper/home
+# cryptsetup close home
 ```
 
 Для шифрования существующие разделы не обязательно форматировать, некоторые файловые системы (напр. BTRFS) можно [зашифровать вместе с данными](./partitions-encryption.md).
@@ -59,8 +59,8 @@ cryptsetup close home
 
 ### Сборка ядра
 
-```bash
-genkernel --luks --btrfs --integrated-initramfs --kernel-config=/full/path/to/your/kernel/config all
+```console
+# genkernel --luks --btrfs --integrated-initramfs --kernel-config=/full/path/to/your/kernel/config all
 ```
 
 - `--luks` - поддержка LUKS разделов
@@ -71,16 +71,16 @@ genkernel --luks --btrfs --integrated-initramfs --kernel-config=/full/path/to/yo
 
 ### Создание ключа
 
-```bash
-dd if=/dev/random bs=1024 count=4 of=/etc/keys/home.key
-chmod 0400 /etc/keys/home.key
+```console
+# dd if=/dev/random bs=1024 count=4 of=/etc/keys/home.key
+# chmod 0400 /etc/keys/home.key
 ```
 
 
 ### Добавление ключа в слот LUKS раздела home
 
-```bash
-cryptsetup luksAddKey /dev/sda3 /etc/keys/home.key
+```console
+# cryptsetup luksAddKey /dev/sda3 /etc/keys/home.key
 ```
 
 ### dmcrypt
@@ -94,8 +94,8 @@ key='/etc/keys/home.key'
 ```
 
 Запуск сервиса `dmcrypt` на уровне `boot`:
-```bash
-rc-update add dmcrypt boot
+```console
+# rc-update add dmcrypt boot
 ```
 
 
@@ -118,34 +118,34 @@ rc-update add dmcrypt boot
 ### Подпись ядра
 
 Переименование файла ядра:
-```bash
-mv -v /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
+```console
+# mv -v /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
 ```
 
 Подпись ядра:
-```bash
-sbsign --key /etc/keys/db.key --cert /etc/keys/db.crt --output /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
+```console
+# sbsign --key /etc/keys/db.key --cert /etc/keys/db.crt --output /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
 ```
 
 Если EFI раздел монтируется не в `/boot` а в `/boot/efi`, то ядро надо скопировать на этот раздел:
-```bash
-cp -v /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/efi/EFI/gentoo/
+```console
+# cp -v /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/efi/EFI/gentoo/
 ```
 
 
 ## Загрузочная запись
 
 При создании загрузочной записи UEFI для загрузки с зашифрованного корневого раздела вместо параметра ядра `root` указывается `crypt_root`:
-```bash
-efibootmgr -c -d /dev/sda -p 1 -L "Gentoo [kernel 6.1.19]" -l '\EFI\gentoo\vmlinuz-6.1.19-gentoo-x86_64' -u 'crypt_root=/dev/sda2'
+```console
+# efibootmgr -c -d /dev/sda -p 1 -L "Gentoo [kernel 6.1.19]" -l '\EFI\gentoo\vmlinuz-6.1.19-gentoo-x86_64' -u 'crypt_root=/dev/sda2'
 ```
 
 ## Проверка secure boot режима
 
-```bash
-mokutil --sb-state
-# Output:
-# SecureBoot enabled
+```console
+$ mokutil --sb-state
+$ # Output:
+$ # SecureBoot enabled
 ```
 
 

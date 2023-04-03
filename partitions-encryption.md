@@ -12,18 +12,18 @@
 ### Проверка файловой системы
 
 Перед всеми операциями с файловой системой стоит проверить файловую систему:
-```bash
-btrfs check /dev/sda1
+```console
+# btrfs check /dev/sda1
 ```
 
 ### Уменьшение файловой системы
 
 Уменьшение размера файловой системы BTRFS на разделе `sda1`:
-```bash
-mkdir /mnt/sda1
-mount /dev/sda1 /mnt/sda1
-btrfs filesystem resize -16M /mnt/sda1
-umount /mnt/sda1
+```console
+# mkdir /mnt/sda1
+# mount /dev/sda1 /mnt/sda1
+# btrfs filesystem resize -16M /mnt/sda1
+# umount /mnt/sda1
 ```
 
 ### Шифрование раздела
@@ -31,22 +31,22 @@ umount /mnt/sda1
 **ВНИМАНИЕ! Данная операция может привести к потере данных. Обязательно делайте бэкапы.**
 
 Шифрование раздела `sda1`:
-```bash
-cryptsetup reencrypt --encrypt --reduce-device-size=16M /dev/sda1
+```console
+# cryptsetup reencrypt --encrypt --reduce-device-size=16M /dev/sda1
 ```
 
 ### Проверка файловой системы после шифрование
 
-```bash
-cryptsetup open /dev/sda1 sda1
-btrfs check /dev/mapper/sda1
+```console
+# cryptsetup open /dev/sda1 sda1
+# btrfs check /dev/mapper/sda1
 ```
 
 
 ### Увеличение файловой системы до максимума
 
-```bash
-mount /dev/mapper/sda1 /mnt/sda1
-btrfs filesystem resize max /mnt/sda1
-umount /mnt/sda1
+```console
+# mount /dev/mapper/sda1 /mnt/sda1
+# btrfs filesystem resize max /mnt/sda1
+# umount /mnt/sda1
 ```
