@@ -124,7 +124,7 @@ key='/etc/keys/home.key'
 
 Подпись ядра:
 ```console
-# sbsign --key /etc/keys/db.key --cert /etc/keys/db.crt --output /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
+# sbsign --key /etc/efikeys/db.key --cert /etc/efikeys/db.crt --output /boot/vmlinuz-6.1.19-gentoo-x86_64 /boot/vmlinuz-6.1.19-gentoo-x86_64-unsigned
 ```
 
 Если EFI раздел монтируется не в `/boot` а в `/boot/efi`, то ядро надо скопировать на этот раздел:
