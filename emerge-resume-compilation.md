@@ -54,10 +54,10 @@
 ### Альтернатива: OverlayFS
 
 ```console
-mkdir /mnt/usb-stick
-mount /dev/sda1 /mnt/usb-stick
-mkdir /mnt/usb-stick/{data,work}
-mount -t overlay overlay -o lowerdir=/var/tmp/portage,upperdir=/mnt/usb-stick/data,workdir=/mnt/usb-stick/work /var/tmp/portage
+# mkdir /mnt/usb-stick
+# mount /dev/sda1 /mnt/usb-stick
+# mkdir /mnt/usb-stick/{data,work}
+# mount -t overlay overlay -o lowerdir=/var/tmp/portage,upperdir=/mnt/usb-stick/data,workdir=/mnt/usb-stick/work /var/tmp/portage
 ```
 
 После успешной установки нужно вручную удалить временные файлы компиляции оставшиеся с предыдущей сборки:
